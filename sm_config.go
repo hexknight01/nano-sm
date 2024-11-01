@@ -2,10 +2,6 @@ package nanosm
 
 import "context"
 
-type SmConfig struct {
-	sm *StateMachine
-}
-
 // TransitionConfig holds transition details between states.
 type TransitionConfig struct {
 	fromState   State
@@ -15,14 +11,6 @@ type TransitionConfig struct {
 	exitAction  func(ctx context.Context, args ...any)
 	enterAction func(ctx context.Context, args ...any)
 	guard       func(ctx context.Context, args ...any) bool
-}
-
-// StateConfig holds the configuration for actions and guards on a state.
-type StateConfig struct {
-	entryAction ActionFunc
-	exitAction  ActionFunc
-	enterAction ActionFunc
-	guard       func(ctx context.Context) bool
 }
 
 // Event sets the event for a transition.

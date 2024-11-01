@@ -54,10 +54,10 @@ func (sm *StateMachine) Transition(from State, to State) *TransitionConfig {
 	}
 }
 
-// AddTransition registers a transition in the state machine.
-func (sm *StateMachine) AddTransition(cfg *TransitionConfig) {
-	sm.transitions[cfg.event] = cfg
-}
+// // AddTransition registers a transition in the state machine.
+// func (sm *StateMachine) AddTransition(cfg *TransitionConfig) {
+// 	sm.transitions[cfg.event] = cfg
+// }
 
 func (sm *StateMachine) CurrentState(ctx context.Context) State {
 	return sm.stateFetcher(ctx)
@@ -65,7 +65,7 @@ func (sm *StateMachine) CurrentState(ctx context.Context) State {
 
 func (sm *StateMachine) fire(ctx context.Context, event Event, args ...interface{}) error {
 	// Get current state of state machine
-	currentState := sm.stateFetcher(ctx, args...)
+	// currentState := sm.stateFetcher(ctx, args...)
 
 	// // Check if a valid transition exists for the event.
 	// transition, ok := sm.transitions[event]
@@ -92,21 +92,21 @@ func (sm *StateMachine) fire(ctx context.Context, event Event, args ...interface
 	// 	transition.entryAction(ctx, args)
 	// }
 	// Exit action of the current state.
-	currentConfig := sm.states[currentState]
-	if currentConfig != nil && currentConfig.exitAction != nil {
-		currentConfig.exitAction(ctx, args)
-	}
+	// currentConfig := sm.states[currentState]
+	// if currentConfig != nil && currentConfig.exitAction != nil {
+	// 	currentConfig.exitAction(ctx, args)
+	// }
 
-	// Entry action of the new state.
-	newConfig := sm.states[sm.currentState]
-	if newConfig != nil && newConfig.entryAction != nil {
-		newConfig.entryAction(ctx, args)
-	}
+	// // Entry action of the new state.
+	// newConfig := sm.states[sm.currentState]
+	// if newConfig != nil && newConfig.entryAction != nil {
+	// 	newConfig.entryAction(ctx, args)
+	// }
 
-	// Enter action of the new state.
-	if newConfig != nil && newConfig.enterAction != nil {
-		newConfig.enterAction(ctx, args)
-	}
+	// // Enter action of the new state.
+	// if newConfig != nil && newConfig.enterAction != nil {
+	// 	newConfig.enterAction(ctx, args)
+	// }
 
 	return nil
 }
@@ -119,4 +119,21 @@ func (sm *StateMachine) TriggerEventCtx(ctx context.Context, event Event, args .
 // TriggerEvent processes an event and performs the appropriate state transition.
 func (sm *StateMachine) TriggerEvent(event Event, args ...interface{}) error {
 	return sm.fire(context.Background(), event, args...)
+}
+
+// TODO: Check race condition here
+func (sm *StateMachine) ConfigState(state State) *StateConfig {
+	var stateHandlers map[State]*StateHandlers
+	// If state machine is already configured this state then skip it
+	if _, ok := sm.states[state]; !ok {
+		stateHandlers = make(map[State]*StateHandlers)
+	}
+	stateHandlers[state] = &StateHandlers{
+		state: state,
+	}
+
+	return &StateConfig{
+		sm:            sm,
+		stateHandlers: stateHandlers,
+	}
 }

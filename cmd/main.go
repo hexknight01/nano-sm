@@ -12,13 +12,13 @@ func main() {
 		// Fetch the current state from an external storage (e.g., database, API)
 		return "NONE" // Replace with actual state fetching logic
 	})
-	stateMachine.State("NEW").
-		EntryAction(func(ctx context.Context, args ...any) { fmt.Println("Entry Action: NEW State") }).
-		ExitAction(func(ctx context.Context, args ...any) { fmt.Println("Exit Action: NEW State") }).
-		EnterAction(func(ctx context.Context, args ...any) { fmt.Println("Enter Action: NEW State") })
+	stateMachine.ConfigState("NEW").
+		// EntryAction(func(ctx context.Context, args ...any) { fmt.Println("Entry Action: NEW State") }).
+		// ExitAction(func(ctx context.Context, args ...any) { fmt.Println("Exit Action: NEW State") }).
+		// EnterAction(func(ctx context.Context, args ...any) { fmt.Println("Enter Action: NEW State") })
 
-	// Define actions for the DEPLOYING_QC state with a guard.
-	stateMachine.State("DEPLOYING_QC").
+		// Define actions for the DEPLOYING_QC state with a guard.
+		stateMachine.State("DEPLOYING_QC").
 		EntryAction(func(ctx context.Context, args ...any) { fmt.Println("Entry Action: DEPLOYING_QC State") }).
 		ExitAction(func(ctx context.Context, args ...any) { fmt.Println("Exit Action: DEPLOYING_QC State") }).
 		EnterAction(func(ctx context.Context, args ...any) { fmt.Println("Enter Action: DEPLOYING_QC State") }).
