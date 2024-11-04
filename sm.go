@@ -39,12 +39,12 @@ func NewStateMachineWithExternalStorage(initialState State, stateFetcher func(ct
 }
 
 // State creates a new state in the state machine.
-func (sm *StateMachine) State(state State) *StateConfig {
-	if sm.states[state] == nil {
-		sm.states[state] = &StateConfig{}
-	}
-	return sm.states[state]
-}
+// func (sm *StateMachine) State(state State) *StateConfig {
+// 	if sm.states[state] == nil {
+// 		sm.states[state] = &StateConfig{}
+// 	}
+// 	return sm.states[state]
+// }
 
 // Transition creates a transition configuration for an event between two states.
 func (sm *StateMachine) Transition(from State, to State) *TransitionConfig {
@@ -122,18 +122,14 @@ func (sm *StateMachine) TriggerEvent(event Event, args ...interface{}) error {
 }
 
 // TODO: Check race condition here
-func (sm *StateMachine) ConfigState(state State) *StateConfig {
-	var stateHandlers map[State]*StateHandlers
+func (sm *StateMachine) BuildState(state State) *StateConfig {
+	var stateConfig map[State]*StateConfig
 	// If state machine is already configured this state then skip it
 	if _, ok := sm.states[state]; !ok {
-		stateHandlers = make(map[State]*StateHandlers)
+		stateConfig = make(map[State]*StateConfig)
 	}
-	stateHandlers[state] = &StateHandlers{
+	stateConfig[state] = &StateConfig{
 		state: state,
 	}
 
-	return &StateConfig{
-		sm:            sm,
-		stateHandlers: stateHandlers,
-	}
 }

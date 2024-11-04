@@ -42,27 +42,3 @@ func (tc *TransitionConfig) Guard(guard func(ctx context.Context, arg ...any) bo
 	tc.guard = guard
 	return tc
 }
-
-// EntryAction adds an entry action for a state.
-func (sc *StateConfig) EntryAction(action func(ctx context.Context, args ...any)) *StateConfig {
-	sc.entryAction = action
-	return sc
-}
-
-// EnterAction adds an action that is triggered when entering a state.
-func (sc *StateConfig) EnterAction(action func(ctx context.Context, args ...any)) *StateConfig {
-	sc.enterAction = action
-	return sc
-}
-
-// ExitAction adds an exit action for a state.
-func (sc *StateConfig) ExitAction(action func(ctx context.Context, args ...any)) *StateConfig {
-	sc.exitAction = action
-	return sc
-}
-
-// Guard adds a guard condition to the state.
-func (sc *StateConfig) Guard(guard func(ctx context.Context) bool) *StateConfig {
-	sc.guard = guard
-	return sc
-}
